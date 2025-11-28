@@ -4,6 +4,37 @@ This plugin uses the telemetry interface of TML-Studios' "The Bus" to control in
 
 Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for Mercedes compatibility.
 
+## Installation
+
+### Quick Install:
+1. Download the latest `.streamDeckPlugin` file from [Releases](https://github.com/BlackMautz/BlackMautz_telemetry_TheBus-streamdeck-custom_Mercedes/releases)
+2. Double-click the downloaded file
+3. Stream Deck software will install it automatically
+
+### Manual Install (for development):
+1. Clone this repository
+2. Copy `src/de.blackmautz.telemetry.mercedes.sdPlugin` to:
+   - **Windows**: `%APPDATA%\Elgato\StreamDeck\Plugins\`
+   - **Mac**: `~/Library/Application Support/com.elgato.StreamDeck/Plugins/`
+3. Restart Stream Deck software
+
+## Setup
+
+1. **Enable Telemetry in The Bus:**
+   - Launch "The Bus"
+   - Go to Settings → Enable "Telemetry Interface"
+   - Restart the game
+
+2. **Configure Stream Deck:**
+   - Add any action from "BlackMautz TML Telemetry - Mercedes" category
+   - In the action settings, configure:
+     - **Target IP**: `127.0.0.1` (use game PC's IP if running remotely)
+     - **Target Port**: `37337` (default)
+
+3. **Test Connection:**
+   - Add a "Connection Status" button to verify connection
+   - Green = Connected, Red = Disconnected
+
 ## Features
 
 ### Mercedes-Specific Enhancements:
@@ -35,6 +66,25 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - [x] Light Switch Control (Rotary switch simulation)
 - [x] Auto Kneeling System
 - [x] Automatic Door Closing
+
+## Usage Examples
+
+### Door Control:
+- **Door 1-4**: Open/close individual doors
+- **Door Lock Left**: Lock all left-side doors (shows active status)
+- **Door Lock Right**: Lock all right-side doors (shows active status)
+- **Door Clearance**: Enable/disable rear door opening permission
+
+### Light Switch:
+Create 3 buttons for full control:
+- **Light Switch Left** - Rotate switch left (increase: Off → Parking → Headlights → High Beam → Fog)
+- **Light Switch Right** - Rotate switch right (decrease)
+- **Light Switch Status** - Display current light state
+
+### Kneeling System:
+- **Auto Kneeling**: Toggle automatic kneeling at stops
+- **Kneeling Toggle**: Manual kneeling control
+- **Lift Up/Down**: Platform lift control
 
 ## Installation
 
