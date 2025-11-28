@@ -1,24 +1,139 @@
-# BlackMautz TML Telemetry - Mercedes Stream Deck Plugin
+# BlackMautz TML Telemetrie - Mercedes Stream Deck Plugin
+
+## 🇩🇪 Deutsch
+
+Dieses Plugin nutzt die Telemetrie-Schnittstelle von TML-Studios' "The Bus" zur Steuerung von In-Game-Funktionen speziell für den **Mercedes-Benz eCitaro**.
+
+Basierend auf dem Original TML Studios Telemetrie Plugin, angepasst von BlackMautz für Mercedes-Kompatibilität.
+
+### Installation
+
+#### Schnellinstallation:
+1. Lade die neueste `.streamDeckPlugin` Datei von [Releases](https://github.com/BlackMautz/BlackMautz_telemetry_TheBus-streamdeck-custom_Mercedes/releases) herunter
+2. Doppelklick auf die heruntergeladene Datei
+3. Die Stream Deck Software installiert das Plugin automatisch
+
+#### Manuelle Installation (für Entwicklung):
+1. Repository klonen
+2. Kopiere `src/de.blackmautz.telemetry.mercedes.sdPlugin` nach:
+   - **Windows**: `%APPDATA%\Elgato\StreamDeck\Plugins\`
+   - **Mac**: `~/Library/Application Support/com.elgato.StreamDeck/Plugins/`
+3. Stream Deck Software neu starten
+
+### Einrichtung
+
+1. **Telemetrie in The Bus aktivieren:**
+   - Starte "The Bus"
+   - Gehe zu Einstellungen → Aktiviere "Telemetrie-Schnittstelle"
+   - Starte das Spiel neu
+
+2. **Stream Deck konfigurieren:**
+   - Füge eine Aktion aus der Kategorie "BlackMautz TML Telemetry - Mercedes" hinzu
+   - In den Aktionseinstellungen konfigurieren:
+     - **Ziel-IP**: `127.0.0.1` (verwende die IP des Spiele-PCs bei Remote-Verbindung)
+     - **Ziel-Port**: `37337` (Standard)
+
+3. **Verbindung testen:**
+   - Füge einen "Connection Status" Button hinzu zur Verbindungsprüfung
+   - Grün = Verbunden, Rot = Getrennt
+
+### Funktionen
+
+#### Mercedes-spezifische Erweiterungen:
+- **Türverriegelung Links/Rechts** - Unabhängige Steuerung für linke und rechte Türverriegelung mit visuellem Statusfeedback
+- **Türfreigabe** - Hintere Türfreigabe umschalten mit Statusanzeige
+- **Auto Kneeling** - Automatisches Kneeling-System umschalten mit invertierter Boolean-Unterstützung
+- **Türautomatik** - Automatisches Türschließen steuern
+- **Lichtschalter** - Drehschalter-Steuerung (Aus/Standlicht/Abblendlicht/Fernlicht/Nebelscheinwerfer vorne/Nebelschlussleuchte)
+  - Lichtschalter Links (nach links drehen - eine Stufe höher)
+  - Lichtschalter Rechts (nach rechts drehen - eine Stufe runter)
+  - Status-Anzeige
+
+#### API-Kompatibilität:
+- Unterstützt sowohl Mercedes API (`/sendeventpress`, `/sendeventrelease`)
+- Rückwärtskompatibel mit Solaris API (`/sendevent`)
+- Handhabt gemischte Boolean- und zustandsbasierte Button-Systeme
+
+#### Funktionierende Features:
+- [x] Wechselgeldsystem
+- [x] Türsteuerung (mit Türfreigabe, Verriegelung links/rechts)
+- [x] Gangwahl
+- [x] Zündung
+- [x] Feststellbremse
+- [x] Benutzerdefinierte Aktionen
+- [x] Ticket-Verkaufsstatus
+- [x] Bus-Startoptionen (Schnellstart)
+- [x] Blinker / Warnblinkanlage
+- [x] Benutzerdefinierte Buttons (mit benutzerdefinierten Feedback-Optionen)
+- [x] Lichtschalter-Steuerung (Drehschalter-Simulation)
+- [x] Auto-Kneeling-System
+- [x] Automatisches Türschließen
+
+### Verwendungsbeispiele
+
+#### Türsteuerung:
+- **Tür 1-4**: Einzelne Türen öffnen/schließen
+- **Türverriegelung Links**: Alle linken Türen verriegeln (zeigt aktiven Status)
+- **Türverriegelung Rechts**: Alle rechten Türen verriegeln (zeigt aktiven Status)
+- **Türfreigabe**: Öffnungserlaubnis für hintere Türen aktivieren/deaktivieren
+
+#### Lichtschalter:
+Erstelle 3 Buttons für volle Kontrolle:
+- **Lichtschalter Links** - Schalter nach links drehen (höher: Aus → Standlicht → Abblendlicht → Fernlicht → Nebel)
+- **Lichtschalter Rechts** - Schalter nach rechts drehen (runter)
+- **Lichtschalter Status** - Aktuellen Lichtstatus anzeigen
+
+#### Kneeling-System:
+- **Auto Kneeling**: Automatisches Kneeling an Haltestellen umschalten
+- **Kneeling Umschalten**: Manuelle Kneeling-Steuerung
+- **Heben/Senken**: Plattform-Lift-Steuerung
+
+### Bekannte Probleme & Besonderheiten
+
+#### Mercedes API-Unterschiede:
+- **Invertierte Boolean-Logik**: Einige Buttons (z.B. Auto Kneeling) verwenden invertierte Logik, wobei `false` = AN
+- **Unterschiedliche Event-Namen**: Mercedes verwendet andere Event-Namen als Solaris
+  - Türautomatik: `ToggleAutomaticRearDoorClosing`
+  - Auto Kneeling: `Pedestrians`
+  - Türfreigabe: `ToggleDoorClearance`
+- **Button-Light-Namen**: Verwendet `ButtonLight <Name>` Format statt `<Name> Light`
+
+### Versions-Historie
+
+**v1.0.1** (Aktuell)
+- Lichtschalter-Steuerung hinzugefügt
+- Auto-Kneeling-Icon-Updates behoben
+- Türautomatik und Türfreigabe behoben
+- Vollständige Mercedes API-Kompatibilität
+
+**v1.0.0**
+- Erste Mercedes eCitaro Veröffentlichung
+- Türverriegelung Links/Rechts Funktionalität
+- Basis Mercedes API-Unterstützung
+
+---
+
+## 🇬🇧 English
 
 This plugin uses the telemetry interface of TML-Studios' "The Bus" to control in-game functions specifically for the **Mercedes-Benz eCitaro**.
 
 Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for Mercedes compatibility.
 
-## Installation
+### Installation
 
-### Quick Install:
+#### Quick Install:
 1. Download the latest `.streamDeckPlugin` file from [Releases](https://github.com/BlackMautz/BlackMautz_telemetry_TheBus-streamdeck-custom_Mercedes/releases)
 2. Double-click the downloaded file
 3. Stream Deck software will install it automatically
 
-### Manual Install (for development):
+#### Manual Install (for development):
 1. Clone this repository
 2. Copy `src/de.blackmautz.telemetry.mercedes.sdPlugin` to:
    - **Windows**: `%APPDATA%\Elgato\StreamDeck\Plugins\`
    - **Mac**: `~/Library/Application Support/com.elgato.StreamDeck/Plugins/`
 3. Restart Stream Deck software
 
-## Setup
+### Setup
 
 1. **Enable Telemetry in The Bus:**
    - Launch "The Bus"
@@ -35,9 +150,9 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
    - Add a "Connection Status" button to verify connection
    - Green = Connected, Red = Disconnected
 
-## Features
+### Features
 
-### Mercedes-Specific Enhancements:
+#### Mercedes-Specific Enhancements:
 - **Door Lock Left/Right** - Independent control for left and right door locking with visual status feedback
 - **Door Clearance** - Toggle rear door clearance with status indication
 - **Auto Kneeling** - Automatic kneeling system toggle with inverted boolean support
@@ -47,12 +162,12 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
   - Light Switch Right (rotate right - decrease)
   - Status Display
 
-### API Compatibility:
+#### API Compatibility:
 - Supports both Mercedes API (`/sendeventpress`, `/sendeventrelease`)
 - Backward compatible with Solaris API (`/sendevent`)
 - Handles mixed boolean and state-based button systems
 
-### Working Features:
+#### Working Features:
 - [x] Cash Change System
 - [x] Door Control (with door clearance, lock left/right)
 - [x] Gear Switch
@@ -67,42 +182,28 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - [x] Auto Kneeling System
 - [x] Automatic Door Closing
 
-## Usage Examples
+### Usage Examples
 
-### Door Control:
+#### Door Control:
 - **Door 1-4**: Open/close individual doors
 - **Door Lock Left**: Lock all left-side doors (shows active status)
 - **Door Lock Right**: Lock all right-side doors (shows active status)
 - **Door Clearance**: Enable/disable rear door opening permission
 
-### Light Switch:
+#### Light Switch:
 Create 3 buttons for full control:
 - **Light Switch Left** - Rotate switch left (increase: Off → Parking → Headlights → High Beam → Fog)
 - **Light Switch Right** - Rotate switch right (decrease)
 - **Light Switch Status** - Display current light state
 
-### Kneeling System:
+#### Kneeling System:
 - **Auto Kneeling**: Toggle automatic kneeling at stops
 - **Kneeling Toggle**: Manual kneeling control
 - **Lift Up/Down**: Platform lift control
 
-## Installation
+### Known Issues & Quirks
 
-1. Download the latest release from the [Releases](https://github.com/BlackMautz/BlackMautz_telemetry_TheBus-streamdeck-custom_Mercedes/releases) page
-2. Double-click the `.streamDeckPlugin` file
-3. Stream Deck software will install it automatically
-
-## Configuration
-
-1. Enable Telemetry in The Bus settings and restart the game
-2. Add actions to your Stream Deck layout
-3. Configure connection settings:
-   - **Target IP**: 127.0.0.1 (default, use game PC's IP if remote)
-   - **Target Port**: 37337 (default)
-
-## Known Issues & Quirks
-
-### Mercedes API Differences:
+#### Mercedes API Differences:
 - **Inverted Boolean Logic**: Some buttons (e.g., Auto Kneeling) use inverted logic where `false` = ON
 - **Different Event Names**: Mercedes uses different event names than Solaris
   - Door Autoclose: `ToggleAutomaticRearDoorClosing`
@@ -110,10 +211,10 @@ Create 3 buttons for full control:
   - Door Clearance: `ToggleDoorClearance`
 - **Button Light Names**: Uses `ButtonLight <Name>` format instead of `<Name> Light`
 
-## Version History
+### Version History
 
 **v1.0.1** (Current)
-- Added Light Switch control (rotary simulation)
+- Added Light Switch control
 - Fixed Auto Kneeling icon updates
 - Fixed Door Autoclose and Door Clearance
 - Complete Mercedes API compatibility
@@ -122,6 +223,8 @@ Create 3 buttons for full control:
 - Initial Mercedes eCitaro release
 - Door Lock Left/Right functionality
 - Basic Mercedes API support
+
+---
 
 ## Credits
 
