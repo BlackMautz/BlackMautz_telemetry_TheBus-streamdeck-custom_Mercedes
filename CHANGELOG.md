@@ -1,5 +1,55 @@
 # Changelog - BlackMautz TML Telemetry Mercedes Plugin
 
+## Version 1.0.2 (2025-11-28)
+
+### Neue Features
+- **Stop Brake (Haltestellenbremse)** Toggle-Button hinzugefügt
+  - 2-State Icon-Wechsel (HaltestelleBremse.png / HaltestelleBremse_on.png)
+  - LED Name: "ButtonLight BusStopBrake" (Mercedes-spezifisch)
+  - Event: `/sendeventpress?event=StopBrakeOnOff`
+  
+- **Interior Light Dim Toggle** - Innenbeleuchtung Gedimmt
+  - Schaltet zwischen Normal (Primary) und Gedimmt 30% (Secondary)
+  - Selbstzentrierender Schalter-Support
+  - Icons: indoor-light.png / indoor-light-on_30pct.png
+  - Event: `/sendeventpress?event=InteriorLightBright` (vertauschter Event-Name!)
+  
+- **Interior Light Full Toggle** - Innenbeleuchtung Hell
+  - Schaltet zwischen Normal (Primary) und Hell 100% (Tertiary)
+  - Selbstzentrierender Schalter-Support
+  - Icons: indoor-light.png / indoor-light-on_100pct.png
+  - Event: `/sendeventpress?event=InteriorLightDim` (vertauschter Event-Name!)
+
+### Icon-Updates
+- Alle fehlenden Solaris-Icons importiert (kompletter assets-Ordner kopiert)
+- Manifest-Icons aktualisiert von Icon_Custom zu spezifischen Icons:
+  - Kneeling/Lifting Control → kneeling
+  - Climate Control → sonderzeichen18
+  - Window Control → window-left-up
+  - Wiper Up/Down → wiper
+  - USB Clearance → USB
+  - Wheelchair Request → Haltestelle_wheelchair
+- State Images in allen Manifests aktualisiert um Icons zu matchen
+
+### Bugfixes
+- Light Control Driver Light Icon-Display behoben
+  - processLightControlSettings() Funktion implementiert
+  - onWillAppear verarbeitet jetzt Settings sofort (nicht nur bei Dropdown-Änderung)
+  - Mercedes button names in lightConfig: InteriorLightControl 1/2, DriverLight
+  - Korrekte stateOn Werte: "true" für DriverLight und InteriorLightControl 1
+- Stop Brake manifest von 1 State zu 2 States geändert für Icon-Wechsel
+
+### Bekannte Besonderheiten
+- **Vertauschte Event-Namen bei Innenbeleuchtung:**
+  - `InteriorLightBright` aktiviert tatsächlich Dim (Secondary)
+  - `InteriorLightDim` aktiviert tatsächlich Bright (Tertiary)
+  - Dies ist ein Bug im Mercedes eCitaro, Plugin kompensiert dies
+- **Selbstzentrierender Schalter:**
+  - InteriorLightControl 2 ist ein selbstzentrierender 3-Positionen-Kippschalter
+  - Zweimaliges Senden des gleichen Events bringt Schalter zurück zu Primary (Normal)
+
+---
+
 ## Änderungen von Solaris zu Mercedes
 
 ### Neue Features (nur in Mercedes)

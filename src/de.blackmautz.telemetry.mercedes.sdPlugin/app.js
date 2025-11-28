@@ -37,6 +37,8 @@ const USBClearanceAction = new Action('de.blackmautz.telemetry.mercedes.usbclear
 const WheelchairRequestAction = new Action('de.blackmautz.telemetry.mercedes.wheelchairrequest');
 const StopRequestAction = new Action('de.blackmautz.telemetry.mercedes.stoprequest');
 const LEDMonitorAction = new Action('de.blackmautz.telemetry.mercedes.ledmonitor');
+const InteriorLightDimAction = new Action('de.blackmautz.telemetry.mercedes.interiorlightdim');
+const InteriorLightFullAction = new Action('de.blackmautz.telemetry.mercedes.interiorlightfull');
 
 var GlobalTargetAddress = null
 var GlobalTargetPort = null
@@ -1834,7 +1836,8 @@ LightControlAction.onKeyDown(({ action, context, device, event, payload }) => {
 });
 
 LightControlAction.onWillAppear(({ action, context, device, event, payload }) => {
-	$SD.getSettings(context);
+	// Process settings immediately to set icon
+	processLightControlSettings(context, payload.settings || {});
 });
 
 LightControlAction.onWillDisappear(({ action, context, device, event, payload }) => {
@@ -1842,11 +1845,15 @@ LightControlAction.onWillDisappear(({ action, context, device, event, payload })
 });
 
 $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightcontrol", ({context, payload}) => {
-	var lightName = payload.settings.LightSelector;
+	processLightControlSettings(context, payload.settings);
+});
+
+function processLightControlSettings(context, settings) {
+	var lightName = settings.LightSelector;
 	if(!lightName) {
 		lightName = "Headlight";
-		payload.settings.LightSelector = "Headlight";
-		$SD.setSettings(context, payload.settings);
+		settings.LightSelector = "Headlight";
+		$SD.setSettings(context, settings);
 	}
 	
 	// Map light selection to LED name and icons
@@ -1882,19 +1889,38 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightcontrol", ({cont
 			iconOn: "Icon_WarningLightsOn.PNG"
 		},
 		"Interior Light": {
-			led: "Passenger Lights",
+			button: "InteriorLightControl 1",
+			stateOn: "true",
 			iconOff: "indoor-light.png",
 			iconOn: "indoor-light-on.png"
 		},
 		"Interior Light Dim": {
-			button: "Interior Light Dim",
+			button: "InteriorLightControl 2",
+			stateOn: "Secondary",
 			iconOff: "indoor-light_30pct.png",
 			iconOn: "indoor-light-on_30pct.png"
 		},
 		"Interior Light Full": {
-			button: "Interior Light Full",
+			button: "InteriorLightControl 2",
+			stateOn: "Tertiary",
 			iconOff: "indoor-light_100pct.png",
 			iconOn: "indoor-light-on_100pct.png"
+		},
+		"Interior Light Left": {
+			button: "Interior Light Left",
+			iconOff: "indoor-light_1L.png",
+			iconOn: "indoor-light-on_1L.png"
+		},
+		"Interior Light Right": {
+			button: "Interior Light Right",
+			iconOff: "indoor-light_1R.png",
+			iconOn: "indoor-light-on_1R.png"
+		},
+		"Driver Light": {
+			button: "DriverLight",
+			stateOn: "true",
+			iconOff: "driver_light.png",
+			iconOn: "driver_light_on.png"
 		}
 	};
 	
@@ -1911,8 +1937,9 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightcontrol", ({cont
 	// Start tracking status - use Button State if available, otherwise LED
 	if(config.button) {
 		// Button-based light (e.g. Interior Light Dim)
+		var activeState = config.stateOn || "Secondary";
 		AddInterval(context, function() {
-			UpdateButtonState(config.button, "Secondary", config.iconOff, config.iconOn, context);
+			UpdateButtonState(config.button, activeState, config.iconOff, config.iconOn, context);
 		});
 	} else {
 		// LED-based light
@@ -1920,7 +1947,7 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightcontrol", ({cont
 			UpdateButtonIcon(config.led, config.iconOn, config.iconOff, context);
 		});
 	}
-});
+}
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Wiper Up Action
@@ -2344,7 +2371,7 @@ StopBrakeAction.onKeyDown(({ action, context, device, event, payload }) => {
 
 StopBrakeAction.onWillAppear(({ action, context, device, event, payload }) => {
 	$SD.getSettings(context);
-	AddInterval(context, function() { UpdateButtonIcon("LED Stop Brake", "HaltestelleBremse_on.png", "HaltestelleBremse.png", context); });
+	AddInterval(context, function() { UpdateButtonIcon("ButtonLight BusStopBrake", "HaltestelleBremse_on.png", "HaltestelleBremse.png", context); });
 });
 
 StopBrakeAction.onWillDisappear(({ action, context, device, event, payload }) => {
@@ -2968,6 +2995,7 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightswitchv2", ({con
 				iconPath = lightIcons[currentIndex];
 			}
 			
+			
 			if(GlobalCurrentState[context] != iconPath) {
 				GlobalCurrentState[context] = iconPath;
 				$SD.setImage(context, iconPath);
@@ -2975,6 +3003,77 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightswitchv2", ({con
 		}
 	});
 });
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Interior Light Dim Toggle Action
+
+InteriorLightDimAction.onKeyDown(({ action, context, device, event, payload }) => {
+	// Toggle: If already Dim (Secondary), send event again to return to Primary
+	// Otherwise activate Dim
+	var buttonName = "InteriorLightControl 2";
+	
+	fetch("http://127.0.0.1:37337/vehicles/current")
+		.then(response => response.json())
+		.then(data => {
+			if(data.Buttons) {
+				var button = data.Buttons.find(b => b.Name === buttonName);
+				if(button) {
+					// Event names are swapped! InteriorLightBright actually activates Dim (Secondary)
+					// If currently Primary -> goes to Secondary (Dim)
+					// If currently Secondary -> returns to Primary (self-centering switch)
+					// If currently Tertiary -> goes to Secondary (switches from Bright to Dim)
+					SendTelemetryAction("/sendeventpress?event=InteriorLightBright");
+				}
+			}
+		});
+});
+
+InteriorLightDimAction.onWillAppear(({ action, context, device, event, payload }) => {
+	AddInterval(context, function() {
+		UpdateButtonState("InteriorLightControl 2", "Secondary", "indoor-light.png", "indoor-light-on_30pct.png", context);
+	});
+});
+
+InteriorLightDimAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Interior Light Full Toggle Action
+
+InteriorLightFullAction.onKeyDown(({ action, context, device, event, payload }) => {
+	// Toggle: If already Bright (Tertiary), send event again to return to Primary
+	// Otherwise activate Bright
+	var buttonName = "InteriorLightControl 2";
+	
+	fetch("http://127.0.0.1:37337/vehicles/current")
+		.then(response => response.json())
+		.then(data => {
+			if(data.Buttons) {
+				var button = data.Buttons.find(b => b.Name === buttonName);
+				if(button) {
+					// Event names are swapped! InteriorLightDim actually activates Bright (Tertiary)
+					// If currently Primary -> goes to Tertiary (Bright)
+					// If currently Tertiary -> returns to Primary (self-centering switch)
+					// If currently Secondary -> goes to Tertiary (switches from Dim to Bright)
+					SendTelemetryAction("/sendeventpress?event=InteriorLightDim");
+				}
+			}
+		});
+});
+
+InteriorLightFullAction.onWillAppear(({ action, context, device, event, payload }) => {
+	AddInterval(context, function() {
+		UpdateButtonState("InteriorLightControl 2", "Tertiary", "indoor-light.png", "indoor-light-on_100pct.png", context);
+	});
+});
+
+InteriorLightFullAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
+
+
+
 
 
 

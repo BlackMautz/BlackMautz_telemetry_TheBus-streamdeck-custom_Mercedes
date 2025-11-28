@@ -50,6 +50,9 @@ Basierend auf dem Original TML Studios Telemetrie Plugin, angepasst von BlackMau
   - Status-Anzeige mit 3 Positionen (vorherige/aktuelle/nächste)
 - **Feststellbremse (Fixing Brake)** - Parkbremse mit Icon-Status (zeigt AN/AUS visuell)
 - **Haltewunsch (Stop Request)** - Zeigt aktive Haltewünsche mit Türnummern an
+- **Haltestellenbremse (Stop Brake)** - Haltestellen-Parkbremse mit 2-State Icon-Wechsel
+- **Innenbeleuchtung Gedimmt** - Schaltet zwischen Normal (Aus) und Gedimmt (30%) mit selbstzentrierendem Schalter
+- **Innenbeleuchtung Hell** - Schaltet zwischen Normal (Aus) und Hell (100%) mit selbstzentrierendem Schalter
 
 #### API-Kompatibilität:
 - Unterstützt sowohl Mercedes API (`/sendeventpress`, `/sendeventrelease`)
@@ -106,7 +109,15 @@ Die Icons ändern sich je nach Position:
 
 ### Versions-Historie
 
-**v1.0.1** (Aktuell)
+**v1.0.2** (Aktuell)
+- Haltestellenbremse (Stop Brake) hinzugefügt mit 2-State Icon-Wechsel
+- Innenbeleuchtung Gedimmt/Hell Toggle-Buttons hinzugefügt
+- Alle fehlenden Icons aus Solaris Plugin importiert
+- Icon-Updates für Kneeling/Lifting, Climate Control, Window Control, Wiper, USB Clearance, Wheelchair Request
+- Light Control Icons für Driver Light und Interior Light Optionen korrigiert
+- Selbstzentrierender Schalter-Support für Innenbeleuchtung (Event-Namen sind vertauscht: InteriorLightBright = Dim, InteriorLightDim = Bright)
+
+**v1.0.1**
 - Lichtschalter-Steuerung hinzugefügt mit dynamischen Icons (zeigt vorherige/aktuelle/nächste Position)
 - Auto-Kneeling-Icon-Updates behoben
 - Türautomatik und Türfreigabe behoben

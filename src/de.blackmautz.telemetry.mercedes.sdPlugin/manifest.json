@@ -197,14 +197,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/lightswitchinspector.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/wiper",
 			"Name": "Wiper Up",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/wiper"
 				}
 			],
 			"Tooltip": "Increases wiper level.",
@@ -212,14 +212,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/wiper",
 			"Name": "Wiper Down",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/wiper"
 				}
 			],
 			"Tooltip": "Decreases wiper level.",
@@ -277,14 +277,19 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/HaltestelleBremse",
 			"Name": "Stop Brake",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/HaltestelleBremse",
+					"Name": "Off"
+				},
+				{
+					"Image": "actions/assets/HaltestelleBremse_on",
+					"Name": "On"
 				}
 			],
 			"Tooltip": "Toggles the stop brake.",
@@ -292,14 +297,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/kneeling",
 			"Name": "Kneeling/Lifting Control",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/kneeling"
 				}
 			],
 			"Tooltip": "Controls kneeling and lifting functions.",
@@ -307,14 +312,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/kneelingliftinspector.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/sonderzeichen18",
 			"Name": "Climate Control",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/sonderzeichen18"
 				}
 			],
 			"Tooltip": "Controls air conditioning and climate functions.",
@@ -322,14 +327,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/climatecontrolinspector.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/window-left-up",
 			"Name": "Window Control",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/window-left-up"
 				}
 			],
 			"Tooltip": "Controls windows and shades.",
@@ -382,14 +387,14 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/USB",
 			"Name": "USB Clearance",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/USB"
 				}
 			],
 			"Tooltip": "Toggles USB clearance.",
@@ -472,17 +477,17 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Custom",
+			"Icon": "actions/assets/Haltestelle_wheelchair",
 			"Name": "Wheelchair Request",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Custom"
+					"Image": "actions/assets/Haltestelle_wheelchair"
 				}
 			],
-			"Tooltip": "Sends wheelchair request.",
+			"Tooltip": "Displays wheelchair request status.",
 			"UUID": "de.blackmautz.telemetry.mercedes.wheelchairrequest",
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
@@ -515,6 +520,46 @@
 			"Tooltip": "Monitor any LED status from the bus.",
 			"UUID": "de.blackmautz.telemetry.mercedes.ledmonitor",
 			"PropertyInspectorPath": "actions/property-inspector/ledmonitorinspector.html"
+		},
+		{
+			"Icon": "actions/assets/indoor-light_30pct",
+			"Name": "Interior Light Dim Toggle",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/indoor-light",
+					"Name": "Normal"
+				},
+				{
+					"Image": "actions/assets/indoor-light-on_30pct",
+					"Name": "Dim"
+				}
+			],
+			"Tooltip": "Toggle between normal and dimmed interior lighting.",
+			"UUID": "de.blackmautz.telemetry.mercedes.interiorlightdim",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/indoor-light_100pct",
+			"Name": "Interior Light Full Toggle",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/indoor-light",
+					"Name": "Normal"
+				},
+				{
+					"Image": "actions/assets/indoor-light-on_100pct",
+					"Name": "Full"
+				}
+			],
+			"Tooltip": "Toggle between normal and full interior lighting.",
+			"UUID": "de.blackmautz.telemetry.mercedes.interiorlightfull",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		}
 	]
 }
