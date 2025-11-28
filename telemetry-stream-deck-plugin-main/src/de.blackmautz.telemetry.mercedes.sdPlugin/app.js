@@ -13,6 +13,7 @@ const ConnectionStatus = new Action('de.blackmautz.telemetry.mercedes.constatus'
 const IndicatorControl = new Action('de.blackmautz.telemetry.mercedes.indicatorcontrol');
 const CustomButtonAction = new Action('de.blackmautz.telemetry.mercedes.custombutton');
 const LightControlAction = new Action('de.blackmautz.telemetry.mercedes.lightcontrol');
+const LightSwitchAction = new Action('de.blackmautz.telemetry.mercedes.lightswitchv2');
 const WiperUpAction = new Action('de.blackmautz.telemetry.mercedes.wiperup');
 const WiperDownAction = new Action('de.blackmautz.telemetry.mercedes.wiperdown');
 const HornAction = new Action('de.blackmautz.telemetry.mercedes.horn');
@@ -619,14 +620,14 @@ DoorAction.onKeyDown(({ action, context, device, event, payload }) => {
 		"Door 3": "DoorRearOpenClose",
 		"Door 4": "DoorFourthOpenClose",
 		"Clearance": "ToggleDoorClearance",
-		"Auto Kneeling": "toggleAutoKneeling",
-		"Door Autoclose": "PreventRearAuto"
+		"Auto Kneeling": "Pedestrians",
+		"Door Autoclose": "ToggleAutomaticRearDoorClosing"
 	};
 	
 	var eventName = eventMapping[payload.settings.DoorSelector];
 	
 	if(eventName) {
-		SendTelemetryAction("/sendevent?event=" + eventName);
+		SendTelemetryAction("/sendeventpress?event=" + eventName);
 	} else {
 		// Fallback to button method for unknown options
 		SendTelemetryAction("/setbutton?button=" + payload.settings.DoorSelector + "&state=1");
@@ -679,7 +680,18 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.dooraction", ({contex
 	if(DoorName == "Clearance")
 	{
 		$SD.setImage(context, "actions/assets/door_auto.png");
-		AddInterval(context, function() {UpdateButtonState("DoorClearance", "Secondary", "door_auto.png", "door_auto_open.png", context)});
+		AddInterval(context, function() {
+			// Mercedes uses boolean true/false, Solaris uses "Secondary" state
+			var button = GlobalButtonData.find(b => b.Name === "DoorClearance");
+			if(button) {
+				var isActive = (button.State === true || button.State === "true" || button.State === "Secondary");
+				var newImage = isActive ? "actions/assets/door_auto_open.png" : "actions/assets/door_auto.png";
+				if(GlobalCurrentState[context] != newImage) {
+					GlobalCurrentState[context] = newImage;
+					$SD.setImage(context, newImage);
+				}
+			}
+		});
 		return;
 	}
 	
@@ -708,16 +720,47 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.dooraction", ({contex
 	// For other new functions (Auto Kneeling, Autoclose), just show a generic icon
 	if(DoorName == "Auto Kneeling")
 	{
-		$SD.setImage(context, "actions/assets/auto_kneeling.png");
-		AddInterval(context, function() {UpdateButtonState("Auto Kneeling", "Secondary", "auto_kneeling.png", "auto_kneeling_on.png", context)});
+		// Set initial icon based on current state
+		var button = GlobalButtonData.find(b => b.Name === "AutomaticKneeling");
+		if(button) {
+			var isActive = (button.State !== true && button.State !== "true" && button.State !== "Off") || button.State === "Secondary";
+			$SD.setImage(context, isActive ? "actions/assets/auto_kneeling_on.png" : "actions/assets/auto_kneeling.png");
+		} else {
+			$SD.setImage(context, "actions/assets/auto_kneeling.png");
+		}
+		
+		AddInterval(context, function() {
+			// Mercedes uses boolean BUT INVERTED: true = OFF, false = ON
+			// Solaris uses "Secondary" state for ON
+			var button = GlobalButtonData.find(b => b.Name === "AutomaticKneeling");
+			if(button) {
+				var isActive = (button.State !== true && button.State !== "true" && button.State !== "Off") || button.State === "Secondary";
+				var newImage = isActive ? "actions/assets/auto_kneeling_on.png" : "actions/assets/auto_kneeling.png";
+				if(GlobalCurrentState[context] != newImage) {
+					GlobalCurrentState[context] = newImage;
+					$SD.setImage(context, newImage);
+				}
+			}
+		});
 		return;
 	}
 	
 	if(DoorName == "Door Autoclose")
 	{
-		// Track the Prevent Rear Auto button status
+		// Track the AutomaticDoorClosing button status
 		$SD.setImage(context, "actions/assets/kinderwagen.png");
-		AddInterval(context, function() {UpdateButtonState("Door Autoclose", "Secondary", "kinderwagen.png", "kinderwagen_on.png", context)});
+		AddInterval(context, function() {
+			// Mercedes uses boolean, Solaris uses "Secondary" state
+			var button = GlobalButtonData.find(b => b.Name === "AutomaticDoorClosing");
+			if(button) {
+				var isActive = (button.State === true || button.State === "true" || button.State === "Secondary");
+				var newImage = isActive ? "actions/assets/kinderwagen_on.png" : "actions/assets/kinderwagen.png";
+				if(GlobalCurrentState[context] != newImage) {
+					GlobalCurrentState[context] = newImage;
+					$SD.setImage(context, newImage);
+				}
+			}
+		});
 		return;
 	}
 	
@@ -729,14 +772,15 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.dooraction", ({contex
 	AddInterval(context, function() {
 		var lampValue = 0.0;
 		
+		// Try Mercedes naming first, then fallback to Solaris
 		if(doorNumber == "1") {
-			lampValue = GlobalLampData["Door 1 Light"];
+			lampValue = GlobalLampData["ButtonLight Door 1"] || GlobalLampData["Door 1 Light"] || 0.0;
 		} else if(doorNumber == "2") {
-			lampValue = GlobalLampData["Second Door Light Ext"];
+			lampValue = GlobalLampData["ButtonLight Door 2"] || GlobalLampData["Second Door Light Ext"] || 0.0;
 		} else if(doorNumber == "3") {
-			lampValue = GlobalLampData["Third Door Light Ext"];
+			lampValue = GlobalLampData["ButtonLight Door 3"] || GlobalLampData["Third Door Light Ext"] || 0.0;
 		} else if(doorNumber == "4") {
-			lampValue = GlobalLampData["Fourth Door Light Ext"];
+			lampValue = GlobalLampData["ButtonLight Door 4"] || GlobalLampData["Fourth Door Light Ext"] || 0.0;
 		}
 		
 		if(GlobalCurrentState[context] != lampValue)
@@ -887,6 +931,29 @@ function UpdateDoorLockStatus(context, buttonNames, targetState, iconOff, iconOn
 	}
 }
 
+function UpdateButtonState(ButtonName, ActiveState, OffIcon, OnIcon, context)
+{
+	if(ButtonName && ActiveState && OffIcon && OnIcon && context)
+	{
+		var offIcon = "actions/assets/" + OffIcon;
+		var onIcon = "actions/assets/" + OnIcon;
+		
+		var button = GlobalButtonData.find(b => b.Name === ButtonName);
+		if(button && button.State != GlobalCurrentState[context])
+		{
+			GlobalCurrentState[context] = button.State;
+			if(button.State === ActiveState)
+			{
+				$SD.setImage(context, onIcon);
+			}
+			else
+			{
+				$SD.setImage(context, offIcon);
+			}
+		}
+	}
+}
+
 function UpdateDoorLockStatusMercedes(context, buttonName, targetState, iconOff, iconOn)
 {
 	// Mercedes-specific: Check if DoorLock 1 State matches targetState (DoorWingLockLeft or DoorWingLockRight)
@@ -965,7 +1032,7 @@ function UpdateDoorLockStatus(context, buttonName, iconOff, iconOn)
 // Cash Action Functions
 
 CashAction.onKeyUp(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=" + payload.settings.CashChangeSelect)
+	SendTelemetryAction("/sendeventpress?event=" + payload.settings.CashChangeSelect)
 });
 
 CashAction.onWillAppear(({ action, context, device, event, payload }) =>
@@ -1295,7 +1362,7 @@ function UpdateStopRequestStatus(context) {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // FixingBrake Action Functions
 FixingBrakeAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=FixingBrake")
+	SendTelemetryAction("/sendeventpress?event=FixingBrake")
 });
 
 FixingBrakeAction.onWillAppear(({ action, context, device, event, payload }) =>
@@ -1727,7 +1794,7 @@ LightControlAction.onKeyDown(({ action, context, device, event, payload }) => {
 	var eventName = eventMapping[lightSelection] || "ToggleLightSwitch";
 	
 	// Use /sendevent like door buttons
-	SendTelemetryAction("/sendevent?event=" + eventName);
+	SendTelemetryAction("/sendeventpress?event=" + eventName);
 });
 
 LightControlAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -1833,7 +1900,7 @@ function UpdateWiperStatus(context) {
 }
 
 WiperUpAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=WiperUp");
+	SendTelemetryAction("/sendeventpress?event=WiperUp");
 	$SD.setImage(context, "actions/assets/wiper-c.png");
 	setTimeout(() => {
 		$SD.setImage(context, "actions/assets/wiper.png");
@@ -1854,7 +1921,7 @@ WiperUpAction.onWillDisappear(({ action, context, device, event, payload }) => {
 // Wiper Down Action
 
 WiperDownAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=WiperDown");
+	SendTelemetryAction("/sendeventpress?event=WiperDown");
 	$SD.setImage(context, "actions/assets/wiper-c.png");
 	setTimeout(() => {
 		$SD.setImage(context, "actions/assets/wiper.png");
@@ -1879,9 +1946,9 @@ var HornInterval = null;
 HornAction.onKeyDown(({ action, context, device, event, payload }) => {
 	// Start continuous horn
 	if(!HornInterval) {
-		SendTelemetryAction("/sendevent?event=Horn");
+		SendTelemetryAction("/sendeventpress?event=Horn");
 		HornInterval = setInterval(() => {
-			SendTelemetryAction("/sendevent?event=Horn");
+			SendTelemetryAction("/sendeventpress?event=Horn");
 		}, 50); // Send every 50ms while held
 	}
 });
@@ -1906,9 +1973,9 @@ var HighBeamInterval = null;
 HighBeamFlasherAction.onKeyDown(({ action, context, device, event, payload }) => {
 	// Start continuous high beam
 	if(!HighBeamInterval) {
-		SendTelemetryAction("/sendevent?event=High Beam Flasher On");
+		SendTelemetryAction("/sendeventpress?event=High Beam Flasher On");
 		HighBeamInterval = setInterval(() => {
-			SendTelemetryAction("/sendevent?event=High Beam Flasher On");
+			SendTelemetryAction("/sendeventpress?event=High Beam Flasher On");
 		}, 50); // Send every 50ms while held
 	}
 });
@@ -1938,7 +2005,7 @@ HighBeamFlasherAction.onWillDisappear(({ action, context, device, event, payload
 // Fixing Brake Toggle Action
 
 FixingBrakeToggleAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=FixingBrake");
+	SendTelemetryAction("/sendeventpress?event=FixingBrake");
 });
 
 FixingBrakeToggleAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2236,7 +2303,7 @@ function UpdateSpeedDisplay(context) {
 // Stop Brake Action
 
 StopBrakeAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=StopBrakeOnOff");
+	SendTelemetryAction("/sendeventpress?event=StopBrakeOnOff");
 });
 
 StopBrakeAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2320,7 +2387,7 @@ KneelingLiftAction.onKeyDown(({ action, context, device, event, payload }) => {
 	}
 	
 	// Send event
-	SendTelemetryAction("/sendevent?event=" + eventName);
+	SendTelemetryAction("/sendeventpress?event=" + eventName);
 });
 
 KneelingLiftAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2414,7 +2481,7 @@ ClimateControlAction.onKeyDown(({ action, context, device, event, payload }) => 
 	};
 	
 	var eventName = eventMapping[selection] || "ToggleAirCondition";
-	SendTelemetryAction("/sendevent?event=" + eventName);
+	SendTelemetryAction("/sendeventpress?event=" + eventName);
 });
 
 ClimateControlAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2564,7 +2631,7 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.windowcontrol", ({con
 // Pantograph On Action
 
 PantographOnAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=Activate Pantograph");
+	SendTelemetryAction("/sendeventpress?event=Activate Pantograph");
 });
 
 PantographOnAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2582,7 +2649,7 @@ PantographOnAction.onWillDisappear(({ action, context, device, event, payload })
 // Pantograph Off Action
 
 PantographOffAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=Deactivate Pantograph");
+	SendTelemetryAction("/sendeventpress?event=Deactivate Pantograph");
 });
 
 PantographOffAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2600,7 +2667,7 @@ PantographOffAction.onWillDisappear(({ action, context, device, event, payload }
 // Camera Switch Action
 
 CameraSwitchAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=SwitchCamera");
+	SendTelemetryAction("/sendeventpress?event=SwitchCamera");
 });
 
 CameraSwitchAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2611,7 +2678,7 @@ CameraSwitchAction.onWillAppear(({ action, context, device, event, payload }) =>
 // USB Clearance Action
 
 USBClearanceAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=ToggleUSB");
+	SendTelemetryAction("/sendeventpress?event=ToggleUSB");
 });
 
 USBClearanceAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2630,7 +2697,7 @@ USBClearanceAction.onWillDisappear(({ action, context, device, event, payload })
 // Wheelchair Request Action
 
 WheelchairRequestAction.onKeyDown(({ action, context, device, event, payload }) => {
-	SendTelemetryAction("/sendevent?event=WheelchairRequest");
+	SendTelemetryAction("/sendeventpress?event=WheelchairRequest");
 });
 
 WheelchairRequestAction.onWillAppear(({ action, context, device, event, payload }) => {
@@ -2702,6 +2769,72 @@ function UpdateLEDMonitor(ledName, context) {
 		$SD.setImage(context, "actions/assets/Icon_Button_Off.png");
 	}
 }
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Light Switch Action (6 positions: Off/Parking/Headlights/High Beam/Fog Front/Fog Rear)
+
+LightSwitchAction.onKeyDown(({ action, context, device, event, payload }) => {
+	var mode = payload.settings.LightSwitchMode || "Up";
+	
+	if(mode === "Up") {
+		SendTelemetryAction("/sendeventpress?event=LightSwitchUp");
+	} else if(mode === "Down") {
+		SendTelemetryAction("/sendeventpress?event=LightSwitchDown");
+	}
+	// Status mode doesn't send anything
+});
+
+LightSwitchAction.onKeyUp(({ action, context, device, event, payload }) => {
+	var mode = payload.settings.LightSwitchMode || "Up";
+	
+	if(mode === "Up") {
+		SendTelemetryAction("/sendeventrelease?event=LightSwitchUp");
+	} else if(mode === "Down") {
+		SendTelemetryAction("/sendeventrelease?event=LightSwitchDown");
+	}
+});
+
+LightSwitchAction.onWillAppear(({ action, context, device, event, payload }) => {
+	$SD.getSettings(context);
+});
+
+LightSwitchAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
+
+$SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightswitchv2", ({context, payload}) => {
+	RemoveInterval(context);
+	
+	var mode = payload.settings.LightSwitchMode;
+	if(mode === undefined) {
+		mode = "Status";
+		payload.settings.LightSwitchMode = "Status";
+		$SD.setSettings(context, payload.settings);
+	}
+	
+	// FORCE set image to ON to test if icons work at all
+	$SD.setImage(context, "actions/assets/Icon_Headlight_On.png");
+	
+	// Update icon periodically
+	AddInterval(context, function() {
+		if(!GlobalButtonData) return;
+		
+		var button = GlobalButtonData.find(b => b.Name === "Light Switch");
+		if(button) {
+			var iconPath = "actions/assets/Icon_Headlight_Off.png";
+			
+			// Off = OFF icon, everything else = ON icon
+			if(button.State !== "Off") {
+				iconPath = "actions/assets/Icon_Headlight_On.png";
+			}
+			
+			if(GlobalCurrentState[context] != iconPath) {
+				GlobalCurrentState[context] = iconPath;
+				$SD.setImage(context, iconPath);
+			}
+		}
+	});
+});
 
 
 

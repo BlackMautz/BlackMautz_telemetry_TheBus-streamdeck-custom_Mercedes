@@ -172,6 +172,26 @@
 			"PropertyInspectorPath": "actions/property-inspector/lightcontrolinspector.html"
 		},
 		{
+			"Icon": "actions/assets/Icon_Headlight_Off",
+			"Name": "Light Switch",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Headlight_Off",
+					"Name": "Off"
+				},
+				{
+					"Image": "actions/assets/Icon_Headlight_On",
+					"Name": "On"
+				}
+			],
+			"Tooltip": "Controls the main light switch (Off/Parking/Headlights/High Beam/Fog Front/Fog Rear).",
+			"UUID": "de.blackmautz.telemetry.mercedes.lightswitchv2",
+			"PropertyInspectorPath": "actions/property-inspector/lightswitchinspector.html"
+		},
+		{
 			"Icon": "actions/assets/Icon_Custom",
 			"Name": "Wiper Up",
 			"Controllers": [
