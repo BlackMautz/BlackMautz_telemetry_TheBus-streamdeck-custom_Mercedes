@@ -45,9 +45,11 @@ Basierend auf dem Original TML Studios Telemetrie Plugin, angepasst von BlackMau
 - **Auto Kneeling** - Automatisches Kneeling-System umschalten mit invertierter Boolean-Unterstützung
 - **Türautomatik** - Automatisches Türschließen steuern
 - **Lichtschalter** - Drehschalter-Steuerung (Aus/Standlicht/Abblendlicht/Fernlicht/Nebelscheinwerfer vorne/Nebelschlussleuchte)
-  - Lichtschalter Links (nach links drehen - eine Stufe höher)
-  - Lichtschalter Rechts (nach rechts drehen - eine Stufe runter)
-  - Status-Anzeige
+  - Schalter nach Rechts (eine Stufe höher)
+  - Schalter nach Links (eine Stufe runter)
+  - Status-Anzeige mit 3 Positionen (vorherige/aktuelle/nächste)
+- **Feststellbremse (Fixing Brake)** - Parkbremse mit Icon-Status (zeigt AN/AUS visuell)
+- **Haltewunsch (Stop Request)** - Zeigt aktive Haltewünsche mit Türnummern an
 
 #### API-Kompatibilität:
 - Unterstützt sowohl Mercedes API (`/sendeventpress`, `/sendeventrelease`)
@@ -162,9 +164,11 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - **Auto Kneeling** - Automatic kneeling system toggle with inverted boolean support
 - **Door Autoclose** - Automatic door closing control
 - **Light Switch** - Rotary light switch control (Off/Parking/Headlights/High Beam/Fog Front/Fog Rear)
-  - Light Switch Left (rotate left - increase)
-  - Light Switch Right (rotate right - decrease)
-  - Status Display
+  - Switch Right (increase - one step up)
+  - Switch Left (decrease - one step down)
+  - Status Display with 3 positions (previous/current/next)
+- **Fixing Brake (Parking Brake)** - Parking brake with icon status (shows ON/OFF visually)
+- **Stop Request** - Displays active stop requests with door numbers
 
 #### API Compatibility:
 - Supports both Mercedes API (`/sendeventpress`, `/sendeventrelease`)
@@ -176,7 +180,7 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - [x] Door Control (with door clearance, lock left/right)
 - [x] Gear Switch
 - [x] Ignition
-- [x] Fixing Brake
+- [x] Fixing Brake (with icon status updates)
 - [x] Custom Actions
 - [x] Ticket Sale Status
 - [x] Bus Start Options (Quick Start)
@@ -185,6 +189,7 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - [x] Light Switch Control (Rotary switch simulation)
 - [x] Auto Kneeling System
 - [x] Automatic Door Closing
+- [x] Stop Request Display (with door numbers)
 
 ### Usage Examples
 

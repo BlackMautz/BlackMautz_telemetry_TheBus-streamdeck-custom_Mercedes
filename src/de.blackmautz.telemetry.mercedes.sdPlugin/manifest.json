@@ -61,11 +61,16 @@
 			"PropertyInspectorPath": "actions/property-inspector/gearselectinspector.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Brake_Off",
+			"Icon": "actions/assets/Feststellbremse_Vers2",
 			"Name": "Fixing Brake",
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Brake_Off"
+					"Image": "actions/assets/Feststellbremse_Vers2",
+					"Name": "Off"
+				},
+				{
+					"Image": "actions/assets/Feststellbremse_Ver2_1",
+					"Name": "On"
 				}
 			],
 			"Tooltip": "Controls the FixingBrake",
@@ -252,14 +257,19 @@
 			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
 		},
 		{
-			"Icon": "actions/assets/Icon_Brake_Off",
+			"Icon": "actions/assets/Feststellbremse_Vers2",
 			"Name": "Fixing Brake Toggle",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "actions/assets/Icon_Brake_Off"
+					"Image": "actions/assets/Feststellbremse_Vers2",
+					"Name": "Off"
+				},
+				{
+					"Image": "actions/assets/Feststellbremse_Ver2_1",
+					"Name": "On"
 				}
 			],
 			"Tooltip": "Toggles the fixing/parking brake.",

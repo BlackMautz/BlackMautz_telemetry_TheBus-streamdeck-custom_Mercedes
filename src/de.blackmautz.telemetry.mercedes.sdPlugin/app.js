@@ -259,8 +259,8 @@ function UpdateTelemetryData()
 				GlobalIgnitionEnabled = data.IgnitionEnabled;
 				
 				// Store Stop Request status from AllLamps
-				if(data.AllLamps && data.AllLamps["DB Stop Request"] !== undefined) {
-					GlobalStopRequest = (data.AllLamps["DB Stop Request"] > 0);
+				if(data.AllLamps && data.AllLamps["LED StopRequest"] !== undefined) {
+					GlobalStopRequest = (data.AllLamps["LED StopRequest"] > 0);
 					GlobalSecondDoorRequest = (data.AllLamps["SecondDoorRequest"] > 0);
 					GlobalThirdDoorRequest = (data.AllLamps["ThirdDoorRequest"] > 0);
 					GlobalFourthDoorRequest = (data.AllLamps["FourthDoorRequest"] > 0);
@@ -510,6 +510,42 @@ function UpdateButtonIcon(LightName, OnIcon, OffIcon, context)
 		
 		UpdateIcon("light", LightName, "", offIcon, onIcon, context);
 	}
+}
+
+function UpdateStopRequestStatus(context) {
+	// Check stop request from global variable
+	var newImage = "";
+	var displayText = "";
+	
+	if(GlobalStopRequest === true) {
+		// Stop request active
+		newImage = "actions/assets/Haltestelle1_2.png";
+		
+		// Check which doors have requests
+		var doorRequests = [];
+		if(GlobalSecondDoorRequest) doorRequests.push("2");
+		if(GlobalThirdDoorRequest) doorRequests.push("3");
+		if(GlobalFourthDoorRequest) doorRequests.push("4");
+		
+		if(doorRequests.length > 0) {
+			displayText = "STOP\nREQUEST\nTÜR " + doorRequests.join(", ");
+		} else {
+			displayText = "STOP\nREQUEST";
+		}
+	} else {
+		// No stop request
+		newImage = "actions/assets/Haltestelle.png";
+		displayText = "";
+	}
+	
+	// Update image
+	if(GlobalCurrentState[context] != newImage) {
+		GlobalCurrentState[context] = newImage;
+		$SD.setImage(context, newImage);
+	}
+	
+	// Update text
+	$SD.setTitle(context, displayText);
 }
 
 function UpdateButtonState(ButtonName, ActiveState, OffIcon, OnIcon, context)
@@ -2769,6 +2805,91 @@ function UpdateLEDMonitor(ledName, context) {
 		$SD.setImage(context, "actions/assets/Icon_Button_Off.png");
 	}
 }
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// High Beam Flasher (Lichthupe)
+
+HighBeamFlasherAction.onKeyDown(({ action, context, device, event, payload }) => {
+	// Start continuous high beam flasher - Mercedes uses sendeventpress
+	if(!HighBeamInterval) {
+		SendTelemetryAction("/sendeventpress?event=HighBeamFlasher");
+		HighBeamInterval = setInterval(() => {
+			SendTelemetryAction("/sendeventpress?event=HighBeamFlasher");
+		}, 50); // Send every 50ms while held
+	}
+});
+
+HighBeamFlasherAction.onKeyUp(({ action, context, device, event, payload }) => {
+	// Stop continuous high beam and send release
+	if(HighBeamInterval) {
+		clearInterval(HighBeamInterval);
+		HighBeamInterval = null;
+		SendTelemetryAction("/sendeventrelease?event=HighBeamFlasher");
+	}
+});
+
+HighBeamFlasherAction.onWillAppear(({ action, context, device, event, payload }) => {
+	$SD.getSettings(context);
+});
+
+HighBeamFlasherAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	// Clean up interval if button removed while held
+	if(HighBeamInterval) {
+		clearInterval(HighBeamInterval);
+		HighBeamInterval = null;
+	}
+});
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Fixing Brake Action (Main Parking Brake)
+
+FixingBrakeAction.onKeyDown(({ action, context, device, event, payload }) => {
+	SendTelemetryAction("/sendevent?event=FixingBrake");
+});
+
+FixingBrakeAction.onWillAppear(({ action, context, device, event, payload }) => {
+	AddInterval(context, function() { 
+		UpdateButtonState("ParkingBrake", "Secondary", "Feststellbremse_Ver2_1.png", "Feststellbremse_Vers2.png", context);
+	});
+});
+
+FixingBrakeAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Fixing Brake Toggle
+
+FixingBrakeToggleAction.onKeyDown(({ action, context, device, event, payload }) => {
+	SendTelemetryAction("/sendeventpress?event=FixingBrake");
+});
+
+FixingBrakeToggleAction.onKeyUp(({ action, context, device, event, payload }) => {
+	SendTelemetryAction("/sendeventrelease?event=FixingBrake");
+});
+
+FixingBrakeToggleAction.onWillAppear(({ action, context, device, event, payload }) => {
+	$SD.getSettings(context);
+	AddInterval(context, function() { 
+		UpdateButtonState("ParkingBrake", "Secondary", "Feststellbremse_Ver2_1.png", "Feststellbremse_Vers2.png", context);
+	});
+});
+
+FixingBrakeToggleAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Stop Request Action (Display only - no events)
+
+StopRequestAction.onWillAppear(({ action, context, device, event, payload }) => {
+	$SD.getSettings(context);
+	AddInterval(context, function() { UpdateStopRequestStatus(context); });
+});
+
+StopRequestAction.onWillDisappear(({ action, context, device, event, payload }) => {
+	RemoveInterval(context);
+});
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Light Switch Action (6 positions: Off/Parking/Headlights/High Beam/Fog Front/Fog Rear)

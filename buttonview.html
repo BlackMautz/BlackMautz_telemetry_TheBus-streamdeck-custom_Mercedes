@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	
+	<!-- Tags to lauch as web app on moble devices-->
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="rgba(220,194,57,1.00)">
+	<meta name="apple-mobile-web-app-status-bar-style" content="rgba(220,194,57,1.00)">
+	
+	<link rel="stylesheet" href="TheBusStyles.css">
+	
+<title>The Bus Telemetry GUI</title>
+<link rel="icon" type="image/x-icon" href="content/favicon.ico">
+<link rel="apple-touch-icon" href="content/favicon.ico">
+</head>
+
+<body>
+	<div class="Title_Container">
+		<h1 class="Text_Center">The Bus Telemetry Buttons GUI</h1>
+		<h6 class="Text_Center">Version 1.1</h6>
+	</div>
+
+    <div style="overflow-y: scroll; height: 96%; margin-left: 20px; margin-top: 5px;" id="uiContainer"></div>
+
+    <script>
+        class VehicleUIButtonGenerator {
+            constructor(jsonData) {
+                this.jsonData = jsonData;
+                this.buttons = this.jsonData.Buttons;
+                this.CurrentVehicle = this.jsonData.ActorName;
+            }
+        
+            generateUI() {
+                const container = document.createElement('div');
+                container.style.maxWidth = '800px';
+        
+                // Group buttons by name
+                const buttonGroups = {};
+                this.buttons.forEach(button => {
+                    button.Actions.forEach(action => {
+                        if (!buttonGroups[button.Name]) {
+                            buttonGroups[button.Name] = [];
+                        }
+                        buttonGroups[button.Name].push(action);
+                    });
+                });
+        
+                // Create button groups
+                Object.keys(buttonGroups).forEach(buttonName => {
+                    const groupContainer = this.createButtonGroup(buttonName);
+                    const actions = buttonGroups[buttonName];
+                    actions.forEach(action => {
+                        const buttonElement = document.createElement('button');
+                        buttonElement.textContent = action;
+                        buttonElement.title = buttonName;
+                        buttonElement.classList.add('vehicle-button');
+                        buttonElement.dataset.action = action;
+                        buttonElement.addEventListener('mousedown', () => this.handleButtonClick(action).bind(this));
+                        buttonElement.addEventListener('mouseup', () => this.handleButtonRelease(action).bind(this));
+                        groupContainer.querySelector('.button-container').appendChild(buttonElement);
+                    });
+                    container.appendChild(groupContainer);
+                });
+        
+                return container;
+            }
+        
+            createButtonGroup(buttonName) {
+                const groupContainer = document.createElement('div');
+                groupContainer.classList.add('button-group');
+                const heading = document.createElement('h2');
+                heading.textContent = buttonName;
+                groupContainer.appendChild(heading);
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('button-container');
+                groupContainer.appendChild(buttonContainer);
+                return groupContainer;
+            }
+        
+            handleButtonClick(action) {
+                console.log(`Performing action: ${action}`);
+                fetch("http://" + window.location.host + "/vehicles/" + this.CurrentVehicle + "/sendeventpress?event=" + action);
+            }
+        
+            handleButtonRelease(action) {
+                console.log(`Releasing action: ${action}`);
+                fetch("http://" + window.location.host + "/vehicles/" + this.CurrentVehicle + "/sendeventrelease?event=" + action);
+            }
+        }
+
+fetch('http://' + window.location.host + '/vehicles/current')
+    .then(response => response.json())
+    .then(jsonData => {
+        const generator = new VehicleUIButtonGenerator(jsonData);
+        const uiContainer = generator.generateUI();
+        document.getElementById('uiContainer').appendChild(uiContainer);
+    })
+    .catch(error => console.error('Error fetching JSON:', error));
+</script>
+	
+</body>
+</html>
