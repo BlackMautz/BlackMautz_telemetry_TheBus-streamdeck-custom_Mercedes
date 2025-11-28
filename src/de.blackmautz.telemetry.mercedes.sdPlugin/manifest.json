@@ -1,0 +1,510 @@
+{
+	"SDKVersion": 2,
+	"Author": "TML Studios - Edit by BlackMautz",
+	"CodePath": "app.html",
+	"Description": "Control The Bus with your StreamDeck! MERCEDES Edition",
+	"Name": "BlackMautz TML Telemetry - Mercedes",
+	"Icon": "actions/assets/Category",
+	"URL": "https://github.com/BlackMautz/BlackMautz_telemetry_TheBus-streamdeck-custom_Mercedes",
+	"Version": "1.0.0.0",
+	"UUID": "de.blackmautz.telemetry.mercedes",
+	"Software": {
+		"MinimumVersion": "6.4"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "10.11"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Category": "BlackMautz TML Telemetry - Mercedes",
+	"CategoryIcon": "actions/assets/Category",
+	"Actions": [
+		{
+			"Icon": "actions/assets/Icon_Button_Off",
+			"Name": "Door Button",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Button_Off"
+				}
+			],
+			"Tooltip": "Controls the passenger doors.",
+			"UUID": "de.blackmautz.telemetry.mercedes.dooraction",
+			"PropertyInspectorPath": "actions/property-inspector/doorbuttoninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Coin",
+			"Name": "Cash Change Button",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Coin"
+				}
+			],
+			"Tooltip": "Controls the cash system.",
+			"UUID": "de.blackmautz.telemetry.mercedes.changeaction",
+			"PropertyInspectorPath": "actions/property-inspector/changebuttoninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_N_Normal",
+			"Name": "Gear Selector",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_N_Normal"
+				}
+			],
+			"Tooltip": "Controls the Gear Selector.",
+			"UUID": "de.blackmautz.telemetry.mercedes.gearselect",
+			"PropertyInspectorPath": "actions/property-inspector/gearselectinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Brake_Off",
+			"Name": "Fixing Brake",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Brake_Off"
+				}
+			],
+			"Tooltip": "Controls the FixingBrake",
+			"UUID": "de.blackmautz.telemetry.mercedes.fixingbrake",
+			"PropertyInspectorPath": "actions/property-inspector/fixingbrakeinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Ignition",
+			"Name": "Ignition Control",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Ignition"
+				}
+			],
+			"Tooltip": "Controls the Ignition.",
+			"UUID": "de.blackmautz.telemetry.mercedes.ignition",
+			"PropertyInspectorPath": "actions/property-inspector/ignitioninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Custom Action",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Executes Custom Commands",
+			"UUID": "de.blackmautz.telemetry.mercedes.customaction",
+			"PropertyInspectorPath": "actions/property-inspector/customactioninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_SaleStatus",
+			"Name": "Ticket Sale Status",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_SaleStatus"
+				}
+			],
+			"Tooltip": "Displays the Current Cash payment Status",
+			"UUID": "de.blackmautz.telemetry.mercedes.paymentstatus",
+			"PropertyInspectorPath": "actions/property-inspector/paymentstatusinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Bus Start Options",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "BusStartOptions",
+			"UUID": "de.blackmautz.telemetry.mercedes.start",
+			"PropertyInspectorPath": "actions/property-inspector/startbuttoninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Connected",
+			"Name": "Connection Status",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Connected"
+				}
+			],
+			"Tooltip": "Telemetry Connection Status Display",
+			"UUID": "de.blackmautz.telemetry.mercedes.constatus",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Indicator",
+			"Name": "Indicator Control",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Indicator"
+				}
+			],
+			"Tooltip": "Controls Indicators and Warning Lights",
+			"UUID": "de.blackmautz.telemetry.mercedes.indicatorcontrol",
+			"PropertyInspectorPath": "actions/property-inspector/indicatorcontrolinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Universal Button",
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Custom Button or Switch with feedback",
+			"UUID": "de.blackmautz.telemetry.mercedes.custombutton",
+			"PropertyInspectorPath": "actions/property-inspector/custombuttoninspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Headlight_Off",
+			"Name": "Light Control",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Headlight_Off"
+				}
+			],
+			"Tooltip": "Controls various lights on the bus.",
+			"UUID": "de.blackmautz.telemetry.mercedes.lightcontrol",
+			"PropertyInspectorPath": "actions/property-inspector/lightcontrolinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Headlight_Off",
+			"Name": "Light Switch",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Headlight_Off",
+					"Name": "Off"
+				},
+				{
+					"Image": "actions/assets/Icon_Headlight_On",
+					"Name": "On"
+				}
+			],
+			"Tooltip": "Controls the main light switch (Off/Parking/Headlights/High Beam/Fog Front/Fog Rear).",
+			"UUID": "de.blackmautz.telemetry.mercedes.lightswitchv2",
+			"PropertyInspectorPath": "actions/property-inspector/lightswitchinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Wiper Up",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Increases wiper level.",
+			"UUID": "de.blackmautz.telemetry.mercedes.wiperup",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Wiper Down",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Decreases wiper level.",
+			"UUID": "de.blackmautz.telemetry.mercedes.wiperdown",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/air-horn",
+			"Name": "Horn",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/air-horn"
+				}
+			],
+			"Tooltip": "Activates the horn.",
+			"UUID": "de.blackmautz.telemetry.mercedes.horn",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/passing",
+			"Name": "High Beam Flasher",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/passing"
+				}
+			],
+			"Tooltip": "High beam flasher (hold to activate).",
+			"UUID": "de.blackmautz.telemetry.mercedes.highbeamflasher",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Brake_Off",
+			"Name": "Fixing Brake Toggle",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Brake_Off"
+				}
+			],
+			"Tooltip": "Toggles the fixing/parking brake.",
+			"UUID": "de.blackmautz.telemetry.mercedes.fixingbraketoggle",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Stop Brake",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Toggles the stop brake.",
+			"UUID": "de.blackmautz.telemetry.mercedes.stopbrake",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Kneeling/Lifting Control",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Controls kneeling and lifting functions.",
+			"UUID": "de.blackmautz.telemetry.mercedes.kneelinglift",
+			"PropertyInspectorPath": "actions/property-inspector/kneelingliftinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Climate Control",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Controls air conditioning and climate functions.",
+			"UUID": "de.blackmautz.telemetry.mercedes.climatecontrol",
+			"PropertyInspectorPath": "actions/property-inspector/climatecontrolinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Window Control",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Controls windows and shades.",
+			"UUID": "de.blackmautz.telemetry.mercedes.windowcontrol",
+			"PropertyInspectorPath": "actions/property-inspector/windowcontrolinspector.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Pantograph On",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Activates the pantograph.",
+			"UUID": "de.blackmautz.telemetry.mercedes.pantographon",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Pantograph Off",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Deactivates the pantograph.",
+			"UUID": "de.blackmautz.telemetry.mercedes.pantographoff",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/view-next-camera",
+			"Name": "Camera Switch",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/view-next-camera"
+				}
+			],
+			"Tooltip": "Switches camera view.",
+			"UUID": "de.blackmautz.telemetry.mercedes.cameraswitch",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "USB Clearance",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Toggles USB clearance.",
+			"UUID": "de.blackmautz.telemetry.mercedes.usbclearance",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/sonderzeichen18",
+			"Name": "Infos",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/sonderzeichen18"
+				}
+			],
+			"Tooltip": "Displays window heating, mirror heating, and stop request status.",
+			"UUID": "de.blackmautz.telemetry.mercedes.infos",
+			"PropertyInspectorPath": "actions/property-inspector/infosinspector.html"
+		},
+		{
+			"Icon": "actions/assets/sonderzeichen18",
+			"Name": "Fuel Display",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/sonderzeichen18"
+				}
+			],
+			"Tooltip": "Displays fuel level, percentage, and low fuel warning.",
+			"UUID": "de.blackmautz.telemetry.mercedes.fuel",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/sonderzeichen18",
+			"Name": "Passengers",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/sonderzeichen18"
+				}
+			],
+			"Tooltip": "Displays passenger and door information.",
+			"UUID": "de.blackmautz.telemetry.mercedes.passengers",
+			"PropertyInspectorPath": "actions/property-inspector/passengersinspector.html"
+		},
+		{
+			"Icon": "actions/assets/sonderzeichen18",
+			"Name": "Engine Info",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/sonderzeichen18"
+				}
+			],
+			"Tooltip": "Displays engine and driving information.",
+			"UUID": "de.blackmautz.telemetry.mercedes.engineinfo",
+			"PropertyInspectorPath": "actions/property-inspector/engineinspector.html"
+		},
+		{
+			"Icon": "actions/assets/sonderzeichen18",
+			"Name": "Speed Display",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/sonderzeichen18"
+				}
+			],
+			"Tooltip": "Displays current speed and allowed speed.",
+			"UUID": "de.blackmautz.telemetry.mercedes.speeddisplay",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Custom",
+			"Name": "Wheelchair Request",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Custom"
+				}
+			],
+			"Tooltip": "Sends wheelchair request.",
+			"UUID": "de.blackmautz.telemetry.mercedes.wheelchairrequest",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Haltestelle",
+			"Name": "Stop Request",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Haltestelle"
+				}
+			],
+			"Tooltip": "Displays stop request status.",
+			"UUID": "de.blackmautz.telemetry.mercedes.stoprequest",
+			"PropertyInspectorPath": "actions/property-inspector/connectionstatus.html"
+		},
+		{
+			"Icon": "actions/assets/Icon_Button_Off",
+			"Name": "LED Monitor",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "actions/assets/Icon_Button_Off"
+				}
+			],
+			"Tooltip": "Monitor any LED status from the bus.",
+			"UUID": "de.blackmautz.telemetry.mercedes.ledmonitor",
+			"PropertyInspectorPath": "actions/property-inspector/ledmonitorinspector.html"
+		}
+	]
+}
