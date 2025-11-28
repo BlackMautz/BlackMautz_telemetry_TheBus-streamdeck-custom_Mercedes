@@ -3,3 +3,15 @@ BuildPlugin.bat
 DistributionTool.exe
 release/
 *.bak
+
+# API Test/Debug Files (local only)
+buttondata.json
+lampdata.json
+vehicles_current.json
+telemetry_data.json
+buttonview.html
+
+# Local Development
+*.log
+.DS_Store
+Thumbs.db
