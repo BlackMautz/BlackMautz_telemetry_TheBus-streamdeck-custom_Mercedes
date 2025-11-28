@@ -1,0 +1,5 @@
+
+BuildPlugin.bat
+DistributionTool.exe
+release/
+*.bak
