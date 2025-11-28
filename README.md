@@ -78,10 +78,14 @@ Basierend auf dem Original TML Studios Telemetrie Plugin, angepasst von BlackMau
 - **Türfreigabe**: Öffnungserlaubnis für hintere Türen aktivieren/deaktivieren
 
 #### Lichtschalter:
-Erstelle 3 Buttons für volle Kontrolle:
-- **Lichtschalter Links** - Schalter nach links drehen (höher: Aus → Standlicht → Abblendlicht → Fernlicht → Nebel)
-- **Lichtschalter Rechts** - Schalter nach rechts drehen (runter)
-- **Lichtschalter Status** - Aktuellen Lichtstatus anzeigen
+Erstelle 3 Buttons für volle Kontrolle - wie ein echter Drehschalter:
+- **Lichtschalter Links** - Zeigt die nächste Position (wohin der Schalter geht wenn du nach links drehst)
+- **Lichtschalter Status** - Zeigt die aktuelle Schalterposition
+- **Lichtschalter Rechts** - Zeigt die vorherige Position (wohin der Schalter geht wenn du nach rechts drehst)
+
+Die Icons ändern sich je nach Position:
+- Off → Parking Lights → Headlights → High Beam → Front Fog → Rear Fog
+- Jeder Button zeigt visuell die Position an, die beim Drücken aktiviert wird
 
 #### Kneeling-System:
 - **Auto Kneeling**: Automatisches Kneeling an Haltestellen umschalten
@@ -101,7 +105,7 @@ Erstelle 3 Buttons für volle Kontrolle:
 ### Versions-Historie
 
 **v1.0.1** (Aktuell)
-- Lichtschalter-Steuerung hinzugefügt
+- Lichtschalter-Steuerung hinzugefügt mit dynamischen Icons (zeigt vorherige/aktuelle/nächste Position)
 - Auto-Kneeling-Icon-Updates behoben
 - Türautomatik und Türfreigabe behoben
 - Vollständige Mercedes API-Kompatibilität
@@ -191,10 +195,14 @@ Based on the original TML Studios Telemetry Plugin, customized by BlackMautz for
 - **Door Clearance**: Enable/disable rear door opening permission
 
 #### Light Switch:
-Create 3 buttons for full control:
-- **Light Switch Left** - Rotate switch left (increase: Off → Parking → Headlights → High Beam → Fog)
-- **Light Switch Right** - Rotate switch right (decrease)
-- **Light Switch Status** - Display current light state
+Create 3 buttons for full control - like a real rotary switch:
+- **Light Switch Left** - Shows the next position (where the switch goes when you rotate left)
+- **Light Switch Status** - Shows the current switch position
+- **Light Switch Right** - Shows the previous position (where the switch goes when you rotate right)
+
+Icons change based on position:
+- Off → Parking Lights → Headlights → High Beam → Front Fog → Rear Fog
+- Each button visually shows the position that will be activated when pressed
 
 #### Kneeling System:
 - **Auto Kneeling**: Toggle automatic kneeling at stops
@@ -214,7 +222,7 @@ Create 3 buttons for full control:
 ### Version History
 
 **v1.0.1** (Current)
-- Added Light Switch control
+- Added Light Switch control with dynamic icons (shows previous/current/next position)
 - Fixed Auto Kneeling icon updates
 - Fixed Door Autoclose and Door Clearance
 - Complete Mercedes API compatibility

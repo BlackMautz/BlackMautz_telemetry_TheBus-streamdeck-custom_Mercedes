@@ -2774,9 +2774,9 @@ function UpdateLEDMonitor(ledName, context) {
 // Light Switch Action (6 positions: Off/Parking/Headlights/High Beam/Fog Front/Fog Rear)
 
 LightSwitchAction.onKeyDown(({ action, context, device, event, payload }) => {
-	var mode = payload.settings.LightSwitchMode || "Up";
+	var mode = payload.settings.LightSwitchMode || "Left";
 	
-	if(mode === "Up") {
+	if(mode === "Left") {
 		SendTelemetryAction("/sendeventpress?event=LightSwitchUp");
 	} else if(mode === "Down") {
 		SendTelemetryAction("/sendeventpress?event=LightSwitchDown");
@@ -2785,9 +2785,9 @@ LightSwitchAction.onKeyDown(({ action, context, device, event, payload }) => {
 });
 
 LightSwitchAction.onKeyUp(({ action, context, device, event, payload }) => {
-	var mode = payload.settings.LightSwitchMode || "Up";
+	var mode = payload.settings.LightSwitchMode || "Left";
 	
-	if(mode === "Up") {
+	if(mode === "Left") {
 		SendTelemetryAction("/sendeventrelease?event=LightSwitchUp");
 	} else if(mode === "Down") {
 		SendTelemetryAction("/sendeventrelease?event=LightSwitchDown");
@@ -2812,8 +2812,16 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightswitchv2", ({con
 		$SD.setSettings(context, payload.settings);
 	}
 	
-	// FORCE set image to ON to test if icons work at all
-	$SD.setImage(context, "actions/assets/Icon_Headlight_On.png");
+	// Light switch states in order: Off, Parking Lights, Headlights, High Beam, Front Fog Light, Rear Fog Light
+	var lightStates = ["Off", "Parking Lights", "Headlights", "High Beam", "Front Fog Light", "Rear Fog Light"];
+	var lightIcons = [
+		"actions/assets/side-markers.png",      // 0: Off
+		"actions/assets/side-markers-c.png",    // 1: Parking Lights
+		"actions/assets/low-beam-c.png",        // 2: Headlights
+		"actions/assets/passing-c.png",         // 3: High Beam
+		"actions/assets/fog-lamp-rear-c.png",   // 4: Front Fog Light
+		"actions/assets/fog-lamp-front-c.png"   // 5: Rear Fog Light
+	];
 	
 	// Update icon periodically
 	AddInterval(context, function() {
@@ -2821,11 +2829,22 @@ $SD.onDidReceiveSettings("de.blackmautz.telemetry.mercedes.lightswitchv2", ({con
 		
 		var button = GlobalButtonData.find(b => b.Name === "Light Switch");
 		if(button) {
-			var iconPath = "actions/assets/Icon_Headlight_Off.png";
+			var currentIndex = lightStates.indexOf(button.State);
+			if(currentIndex === -1) currentIndex = 0; // Default to Off if state unknown
 			
-			// Off = OFF icon, everything else = ON icon
-			if(button.State !== "Off") {
-				iconPath = "actions/assets/Icon_Headlight_On.png";
+			var iconPath = "";
+			
+			if(mode === "Left") {
+				// Left button shows: next position (one step higher)
+				var nextIndex = Math.min(currentIndex + 1, lightIcons.length - 1);
+				iconPath = lightIcons[nextIndex];
+			} else if(mode === "Down") {
+				// Right button shows: previous position (one step lower)
+				var prevIndex = Math.max(currentIndex - 1, 0);
+				iconPath = lightIcons[prevIndex];
+			} else {
+				// Status button shows: current position
+				iconPath = lightIcons[currentIndex];
 			}
 			
 			if(GlobalCurrentState[context] != iconPath) {
