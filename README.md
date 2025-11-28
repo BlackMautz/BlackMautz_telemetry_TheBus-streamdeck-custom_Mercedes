@@ -65,14 +65,29 @@ Basierend auf dem Original TML Studios Telemetrie Plugin, angepasst von BlackMau
 - [x] Gangwahl
 - [x] Zündung
 - [x] Feststellbremse
+- [x] Haltestellenbremse
 - [x] Benutzerdefinierte Aktionen
 - [x] Ticket-Verkaufsstatus
 - [x] Bus-Startoptionen (Schnellstart)
 - [x] Blinker / Warnblinkanlage
 - [x] Benutzerdefinierte Buttons (mit benutzerdefinierten Feedback-Optionen)
 - [x] Lichtschalter-Steuerung (Drehschalter-Simulation)
+- [x] Lichtsteuerung (Fahrerlicht, Innenbeleuchtung mit Dropdown)
+- [x] Innenbeleuchtung Gedimmt/Hell Toggle-Buttons
 - [x] Auto-Kneeling-System
 - [x] Automatisches Türschließen
+- [x] Kneeling/Lifting Kontrolle
+- [x] Klimaanlage-Steuerung
+- [x] Fenstersteuerung
+- [x] Scheibenwischer Hoch/Runter
+- [x] USB-Freigabe
+- [x] Rollstuhl-Anforderung
+- [x] Haltewunsch-Anzeige
+- [x] Horn (Hupe)
+- [x] Lichthupe (High Beam Flasher)
+- [x] Kamera-Umschaltung
+- [x] Anzeige-Buttons (Geschwindigkeit, Motor, Kraftstoff, Passagiere, Infos)
+- [x] LED-Monitor
 
 ### Verwendungsbeispiele
 
